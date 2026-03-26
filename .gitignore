@@ -2,3 +2,4 @@ MedicalMNIST/
 FashionMNIST/
 MNIST/
 venv/
+__pycache__

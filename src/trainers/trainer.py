@@ -9,17 +9,17 @@ class Trainer:
 
     Attributes:
         model: Model using (for example: ANN, CNN, etc)
-        train_loader, val_loader: Training and Validation Loader 
+        train_loader, test_loader: Training and Validation Loader 
         optimizer: Name of the optimizer used (for example: adam, sgd, etc)
         lr (float): Learning Rate
         criterion: Loss function used, possibly Cross Entropy Loss
         device: Training device (cpu or gpu)
     '''
 
-    def __init__(self, model, train_loader, val_loader, optimizer = "adam", lr = 0.001, criterion = None, device = "cpu"):
+    def __init__(self, model, train_loader, test_loader, optimizer = "adam", lr = 0.001, criterion = None, device = "cpu"):
         self.model = model.to(device)
         self.train_loader = train_loader
-        self.val_loader = val_loader
+        self.test_loader = test_loader
         self.device = device
 
         # Loss
@@ -61,7 +61,7 @@ class Trainer:
         correct = 0
         total = 0
         with torch.no_grad():
-            for x, y in self.val_loader:
+            for x, y in self.test_loader:
                 x, y = x.to(self.device), y.to(self.device)
                 outputs = self.model(x)
                 _, preds = torch.max(outputs, 1)
