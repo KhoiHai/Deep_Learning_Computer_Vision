@@ -35,14 +35,14 @@ def get_fashion_mnist_loader(data_dir: str, batch_size: int = 64, val_split_fact
         root = data_dir,
         train = True,
         transform = transform,
-        download = False
+        download = True
     )
 
     test_dataset = datasets.FashionMNIST(
         root = data_dir,
         train = False,
         transform = transform,
-        download = False
+        download = True
     )
 
     # Train/Validation Split

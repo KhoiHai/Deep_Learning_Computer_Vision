@@ -1,0 +1,19 @@
+{
+    "model_name": "ANN2Layers",
+    "dataset_name": "Fashion-MNIST",
+    "dataset_path": "/content/drive/MyDrive/[Computer_Vision]Deep_Learning/Deep_Learning_Computer_Vision/data",
+
+
+    "input_size": 784,
+    "num_classes": 10,
+
+    "hidden_sizes": [256, 64],
+
+    "batch_size": 64,
+    "num_epochs": 20,
+
+    "optimizer_name": "sgd_momentum",
+    "lr": 0.01,
+
+    "output_path": "/content/drive/MyDrive/[Computer_Vision]Deep_Learning/Deep_Learning_Computer_Vision/results/ANN/FashionMNIST_ANN2Layers"
+}

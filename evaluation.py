@@ -10,7 +10,25 @@ from src.datasets.medical_mnist_loader import get_medical_mnist_loader
 from src.trainers.trainer import Trainer
 from src.models.ANN import ANN5Layers, ANN2Layers
 
-def main(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
+def test(model, test_loader, device):
+    model.eval()
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for x, y in test_loader:
+            x, y = x.to(device), y.to(device)
+
+            outputs = model(x)
+            _, preds = torch.max(outputs, 1)
+
+            total += y.size(0)
+            correct += (preds == y).sum().item()
+
+    acc = correct / total
+    return acc
+
+def evaluation(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
     # ---------------- CONFIG ----------------
     device = "cuda" if torch.cuda.is_available() else "cpu"
     if device == "cuda":
@@ -65,44 +83,30 @@ def main(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
         model = ANN5Layers(input_size = input_size, num_classes = num_classes) 
         print("[LOADING MODEL] Successfully load model ANN 5-Hidden Layers")
 
-    trainer = Trainer(
-        model=model,
-        train_loader=train_loader,
-        test_loader=val_loader,
-        optimizer=optimizer_name,
-        lr=lr,
-        device=device
-    )
-    print("[TRAINING PHASE]")
+    # ------------- LOAD WEIGHTS --------
+    pretrained_path = exp_dir + "/best_model.pth"
+    model.load_state_dict(torch.load(pretrained_path, map_location=device))
+    model = model.to(device)
 
-    # ---------------- CSV LOG ----------------
-    csv_path = os.path.join(exp_dir, "log.csv")
+    # ------------- TEST ------------------
+    test_acc = test(model, test_loader, device)
 
-    with open(csv_path, mode="w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["epoch", "train_loss", "val_loss", "val_acc"])
+    print("=" * 30)
+    print(f"Test Accuracy: {test_acc:.4f}")
+    print("=" * 30)
 
-    # ---------------- TRAIN ----------------
-    best_val_acc = 0
+    # ------------- SAVE RESULT ------------------
+    result_txt_path = os.path.join(exp_dir, "test_results.txt")
 
-    for epoch in range(num_epochs):
-        train_loss = trainer.train_one_epoch()
-        val_acc, val_loss = trainer.validate()
+    with open(result_txt_path, "w") as f:
+        f.write("===== TEST RESULTS =====\n")
+        f.write(f"Dataset: {dataset_name}\n")
+        f.write(f"Model: {model_name}\n")
+        f.write(f"Optimizer: {optimizer_name}\n")
+        f.write(f"Learning Rate: {lr}\n")
+        f.write(f"Batch Size: {batch_size}\n")
+        f.write(f"Epochs: {num_epochs}\n")
+        f.write("\n")
+        f.write(f"Test Accuracy: {test_acc:.4f}\n")
 
-        print(f"Epoch [{epoch+1}/{num_epochs}] - "f"Train Loss: {train_loss:.4f}, "f"Val Loss: {val_loss:.4f}, "f"Val Acc: {val_acc:.4f}")
-
-        # Log CSV
-        with open(csv_path, mode="a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([epoch + 1, train_loss, val_loss, val_acc])
-
-        # Save best model
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            torch.save(trainer.model.state_dict(), os.path.join(exp_dir, "best_model.pth"))
-
-    print(f"Training completed. Best validation accuracy: {best_val_acc:.4f}")
-    print(f"Results saved in {exp_dir}")
-
-if __name__ == "__main__":
-    main()
+    print(f"[SAVED] Test results saved to {result_txt_path}")

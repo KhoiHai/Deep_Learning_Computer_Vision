@@ -24,10 +24,12 @@ def get_medical_mnist_loader(data_dir: str, batch_size: int = 64, val_split_fact
     if not os.path.exists(data_dir):
         os.makedirs(data_dir, exist_ok = False)
 
-    # Transformation
+    # Transform 
     transform = transforms.Compose([
+        transforms.Resize((64, 64)),                  
+        transforms.Grayscale(num_output_channels=1),
         transforms.ToTensor(),
-        transforms.Normalize([0.5,], [0.5])
+        transforms.Normalize([0.5], [0.5])
     ])
 
     # Load dataset
