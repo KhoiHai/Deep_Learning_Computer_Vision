@@ -10,11 +10,11 @@ from src.datasets.medical_mnist_loader import get_medical_mnist_loader
 from src.trainers.trainer import Trainer
 from src.models.ANN import ANN5Layers, ANN2Layers
 
-def main():
+def main(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
     # ---------------- CONFIG ----------------
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    with open("./configs/ANN/MNIST_vanilla_sgd.json", "r") as f:
+    with open(config_path, "r") as f:
         config = json.load(f)
 
     dataset_name = config["dataset_name"]
