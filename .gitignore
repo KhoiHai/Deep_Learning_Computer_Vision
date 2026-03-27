@@ -3,3 +3,4 @@ FashionMNIST/
 MNIST/
 venv/
 __pycache__/
+data/
