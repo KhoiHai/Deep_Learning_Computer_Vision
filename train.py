@@ -8,7 +8,7 @@ from src.datasets.fashion_mnist_loader import get_fashion_mnist_loader
 from src.datasets.medical_mnist_loader import get_medical_mnist_loader
 
 from src.trainers.trainer import Trainer
-from src.models.ANN import ANN
+from src.models.ANN import ANN5Layers, ANN2Layers
 
 def main():
     # ---------------- CONFIG ----------------
@@ -46,8 +46,12 @@ def main():
 
     # ---------------- MODEL ----------------
     print("[LOADING MODEL PHASE]")
-    model = ANN(input_size=input_size, num_classes=num_classes)
-    print("[LOADING MODEL] Successfully load model")
+    if model_name == "ANN2Layers":
+        model = ANN2Layers(input_size = input_size, num_classes = num_classes)
+        print("[LOADING MODEL] Successfully load model ANN 2-Hidden Layers")
+    elif model_name == "ANN5Layers":
+        model = ANN5Layers(input_size = input_size, num_classes = num_classes) 
+        print("[LOADING MODEL] Successfully load model ANN 5-Hidden Layers")
 
     trainer = Trainer(
         model=model,
