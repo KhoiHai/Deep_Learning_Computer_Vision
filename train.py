@@ -13,11 +13,20 @@ from src.models.ANN import ANN5Layers, ANN2Layers
 def main(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
     # ---------------- CONFIG ----------------
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        print("[PROCESSOR] GPU is used")
+    else:
+        print("[PROCESSOR] CPU is used")
+
+    if not os.path.exists(config_path):
+        raise FileExistsError(f"Configuration path {config_path} is not found!")
+    print("[LOADING CONFIGURATION] Start loading configuration file")
 
     with open(config_path, "r") as f:
         config = json.load(f)
 
     dataset_name = config["dataset_name"]
+    dataset_path = config["dataset_path"]
     model_name = config["model_name"]
     input_size = config["input_size"]
     batch_size = config["batch_size"]
@@ -33,13 +42,16 @@ def main(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
     # ---------------- DATA ----------------
     print("[LOADING DATASET PHASE]")
     if dataset_name == "MNIST":
-        train_loader, val_loader, test_loader = get_mnist_loader("./data", batch_size = batch_size)
+        print("[LOADING DATASET] Loading Handwritten MNIST dataset ...")
+        train_loader, val_loader, test_loader = get_mnist_loader(data_dir = dataset_path, batch_size = batch_size)
         print("[LOADING DATASET] Loading successfully Handwritten MNIST dataset")
     elif dataset_name == "Fashion-MNIST":
-        train_loader, val_loader, test_loader = get_fashion_mnist_loader("./data", batch_size = batch_size)
+        print("[LOADING DATASET] Loading Fashion MNIST dataset ...")
+        train_loader, val_loader, test_loader = get_fashion_mnist_loader(data_dir = dataset_path, batch_size = batch_size)
         print("[LOADING DATASET] Loading successfully Fashion MNIST dataset")
     elif dataset_name == "Medical-MNIST":
-        train_loader, val_loader, test_loader = get_medical_mnist_loader("./data/MedicalMNIST", batch_size = batch_size)
+        print("[LOADING DATASET] Loading Medical MNIST dataset ...")
+        train_loader, val_loader, test_loader = get_medical_mnist_loader(data_dir = dataset_path, batch_size = batch_size)
         print("[LOADING DATASET] Loading successfully Medical MNIST dataset")
     else:
         raise ValueError(f"Dataset name {dataset_name} is not found!")
@@ -68,21 +80,21 @@ def main(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
 
     with open(csv_path, mode="w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["epoch", "train_loss", "val_acc"])
+        writer.writerow(["epoch", "train_loss", "val_loss", "val_acc"])
 
     # ---------------- TRAIN ----------------
     best_val_acc = 0
 
     for epoch in range(num_epochs):
         train_loss = trainer.train_one_epoch()
-        val_acc = trainer.validate()
+        val_acc, val_loss = trainer.validate()
 
-        print(f"Epoch [{epoch+1}/{num_epochs}] - Loss: {train_loss:.4f}, Val Acc: {val_acc:.4f}")
+        print(f"Epoch [{epoch+1}/{num_epochs}] - "f"Train Loss: {train_loss:.4f}, "f"Val Loss: {val_loss:.4f}, "f"Val Acc: {val_acc:.4f}")
 
         # Log CSV
         with open(csv_path, mode="a", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow([epoch+1, train_loss, val_acc])
+            writer.writerow([epoch+1, train_loss, val_loss, val_acc])
 
         # Save best model
         if val_acc > best_val_acc:

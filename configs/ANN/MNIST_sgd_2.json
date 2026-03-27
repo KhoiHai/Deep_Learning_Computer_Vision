@@ -12,8 +12,8 @@
     "batch_size": 64,
     "num_epochs": 20,
 
-    "optimizer_name": "sgd_momentum",
+    "optimizer_name": "sgd",
     "lr": 0.01,
 
-    "output_path": "/content/drive/MyDrive/[Computer_Vision]Deep_Learning/Deep_Learning_Computer_Vision/results/ANN/ann_mnist_momentum_sgd_2"
+    "output_path": "/content/drive/MyDrive/[Computer_Vision]Deep_Learning/Deep_Learning_Computer_Vision/results/ANN/ann_mnist_sgd_2"
 }

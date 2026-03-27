@@ -27,7 +27,7 @@ class Trainer:
 
         # Optimizer
         if optimizer == "adam":
-            self.optimizer = optim.Adam(self.model.parameters(), lr = lr)
+            self.optimizer = optim.AdamW(self.model.parameters(), lr = lr, weight_decay=1e-2)
         elif optimizer == "sgd":
             self.optimizer = optim.SGD(self.model.parameters(), lr = lr, momentum = 0.0)
         elif optimizer == "sgd_momentum":
@@ -58,13 +58,18 @@ class Trainer:
     def validate(self):
         # Set the model validation mode
         self.model.eval()
+        total_loss = 0
         correct = 0
         total = 0
         with torch.no_grad():
             for x, y in self.test_loader:
                 x, y = x.to(self.device), y.to(self.device)
                 outputs = self.model(x)
+
+                loss = self.criterion(outputs, y)
+                total_loss += loss.item() * x.size(0)
+
                 _, preds = torch.max(outputs, 1)
                 total += y.size(0)
                 correct += (preds == y).sum().item()
-        return correct/total 
+        return correct/total, total_loss/total

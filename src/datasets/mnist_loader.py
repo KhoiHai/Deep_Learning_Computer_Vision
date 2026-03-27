@@ -35,14 +35,14 @@ def get_mnist_loader(data_dir: str, batch_size: int = 64, val_split_factor: floa
         root = data_dir,
         train = True,
         transform = transform,
-        download = False
+        download = True
     )
 
     test_dataset = datasets.MNIST(
         root = data_dir,
         train = False,
         transform = transform,
-        download = False
+        download = True
     )
 
     # Train/Validation split
@@ -59,21 +59,21 @@ def get_mnist_loader(data_dir: str, batch_size: int = 64, val_split_factor: floa
         train_dataset,
         batch_size = batch_size,
         shuffle = True,
-        num_workers = 2
+        num_workers = 0
     )
 
     val_loader = DataLoader(
         val_dataset,
         batch_size = batch_size,
         shuffle = False,
-        num_workers = 2
+        num_workers = 0
     )
 
     test_loader = DataLoader(
         test_dataset,
         batch_size = batch_size,
         shuffle = False,
-        num_workers = 2
+        num_workers = 0
     )
 
     return train_loader, val_loader, test_loader

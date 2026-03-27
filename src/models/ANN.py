@@ -19,7 +19,7 @@ class ANN2Layers(nn.Module):
             num_classes (int): Number of classes
         '''
         # Define Layers
-        super.__init__()
+        super().__init__()
         self.fc1 = nn.Linear(input_size, hidden_size[0])
         self.fc2 = nn.Linear(hidden_size[0], hidden_size[1])
         self.fc3 = nn.Linear(hidden_size[1], num_classes)
@@ -27,7 +27,7 @@ class ANN2Layers(nn.Module):
     def forward(self, x):
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc(x))
+        x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x 
 

@@ -59,21 +59,21 @@ def get_fashion_mnist_loader(data_dir: str, batch_size: int = 64, val_split_fact
         train_dataset,
         batch_size = batch_size,
         shuffle = True,
-        num_workers = 2
+        num_workers = 0
     )
 
     val_loader = DataLoader(
         val_dataset,
         batch_size = batch_size,
         shuffle = False,
-        num_workers = 2
+        num_workers = 0
     )
 
     test_loader = DataLoader(
         test_dataset,
         batch_size = batch_size,
         shuffle = False,
-        num_workers = 2
+        num_workers = 0
     )
 
     return train_loader, val_loader, test_loader
