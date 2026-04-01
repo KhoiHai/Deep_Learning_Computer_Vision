@@ -31,7 +31,7 @@ class Trainer:
         elif optimizer == "sgd":
             self.optimizer = optim.SGD(self.model.parameters(), lr = lr, momentum = 0.0)
         elif optimizer == "sgd_momentum":
-            self.optimizer = optim.SGD(self.model.parameters(), lr = lr, momentum = 0.9)
+            self.optimizer = optim.SGD(self.model.parameters(), lr = lr, momentum = 0.9, weight_decay = 1e-2)
         else:
             raise ValueError(f"Optimizer {optimizer} is not founded")
         

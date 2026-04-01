@@ -1,0 +1,19 @@
+{
+    "model_name": "CNN",
+    "dataset_name": "Medical-MNIST",
+    "dataset_path": "/content/MedicalMNIST",
+
+
+    "input_size": [64, 64],
+    "num_classes": 10,
+
+    "hidden_sizes": [256, 64],
+
+    "batch_size": 64,
+    "num_epochs": 10,
+
+    "optimizer_name": "adam",
+    "lr": 0.001,
+
+    "output_path": "/content/drive/MyDrive/[Computer_Vision]Deep_Learning/Deep_Learning_Computer_Vision/results/CNN/MedicalMNIST_CNN"
+}

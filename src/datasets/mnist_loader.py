@@ -26,6 +26,7 @@ def get_mnist_loader(data_dir: str, batch_size: int = 64, val_split_factor: floa
 
     # Transformation
     transform = transforms.Compose([
+        #transforms.Resize((32, 32)),
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
     ])

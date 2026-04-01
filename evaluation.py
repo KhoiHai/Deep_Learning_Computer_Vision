@@ -9,6 +9,8 @@ from src.datasets.medical_mnist_loader import get_medical_mnist_loader
 
 from src.trainers.trainer import Trainer
 from src.models.ANN import ANN5Layers, ANN2Layers
+from src.models.LeNet5 import LeNet5
+from src.models.CNN import CNN
 
 def test(model, test_loader, device):
     model.eval()
@@ -82,6 +84,12 @@ def evaluation(config_path: str = "./configs/ANN/MNIST_vanilla_sgd_5.json"):
     elif model_name == "ANN5Layers":
         model = ANN5Layers(input_size = input_size, num_classes = num_classes) 
         print("[LOADING MODEL] Successfully load model ANN 5-Hidden Layers")
+    elif model_name == "LeNet5":
+        model = LeNet5(in_channels = 1, num_classes = num_classes)
+        print("[LOADING MODEL] Successfully load model LeNet5")
+    else:
+        model = CNN(input_size = input_size, in_channels = 1, num_classes = num_classes)
+        print("[LOADING MODEL] Successfully load model custom CNN")
 
     # ------------- LOAD WEIGHTS --------
     pretrained_path = exp_dir + "/best_model.pth"

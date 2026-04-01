@@ -1,0 +1,19 @@
+{
+    "model_name": "LeNet5",
+    "dataset_name": "Medical-MNIST",
+    "dataset_path": "/content/MedicalMNIST",
+
+
+    "input_size": 4096,
+    "num_classes": 10,
+
+    "hidden_sizes": [256, 64],
+
+    "batch_size": 64,
+    "num_epochs": 15,
+
+    "optimizer_name": "sgd_momentum",
+    "lr": 0.01,
+
+    "output_path": "/content/drive/MyDrive/[Computer_Vision]Deep_Learning/Deep_Learning_Computer_Vision/results/LeNet5/MedicalMNIST_LeNet5"
+}
